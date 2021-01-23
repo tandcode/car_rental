@@ -1,7 +1,7 @@
 package com.epam.rd.java.final_project.car_rental.controller;
 
-import com.epam.rd.java.final_project.car_rental.domain.Message;
-import com.epam.rd.java.final_project.car_rental.domain.User;
+import com.epam.rd.java.final_project.car_rental.entity.Message;
+import com.epam.rd.java.final_project.car_rental.entity.User;
 import com.epam.rd.java.final_project.car_rental.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

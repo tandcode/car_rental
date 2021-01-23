@@ -1,4 +1,4 @@
-package com.epam.rd.java.final_project.car_rental.domain;
+package com.epam.rd.java.final_project.car_rental.entity;
 
 import javax.persistence.*;
 

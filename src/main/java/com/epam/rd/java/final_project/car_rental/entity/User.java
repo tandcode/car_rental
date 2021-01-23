@@ -1,9 +1,7 @@
-package com.epam.rd.java.final_project.car_rental.domain;
+package com.epam.rd.java.final_project.car_rental.entity;
 
-import com.epam.rd.java.final_project.car_rental.repository.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import javax.persistence.*;
 import java.util.Collection;

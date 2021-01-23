@@ -3,10 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="i18n.js"></script>
 </head>
 <body>
-    <div>Hello user</div>
-    <a th:href="@{/main}">Main page</a>
+    <div>
+        <span th:text="#{lang.change}"></span>:
+        <a th:href="@{'?lang=en'}" th:text="#{lang.en}"></a>
+        <a th:href="@{'?lang=ua'}" th:text="#{lang.ua}"></a>
 
+    </div>
+    <div th:text="#{greeting.greeting}"></div>
+    <a th:href="@{/main}" th:text="#{greeting.main}"></a>
 </body>
 </html>

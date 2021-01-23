@@ -1,27 +1,54 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-abstract class AbstractList
-abstract AbstractCollection
-interface List
-interface Collection
 
-List <|-- AbstractList
-Collection <|-- AbstractCollection
 
-Collection <|- List
-AbstractCollection <|- AbstractList
-AbstractList <|-- ArrayList
+User "1" *-- "*" Role
 
-class ArrayList {
-Object[] elementData
-size()
+Car "1" o-- "1" Brand
+Car "1" *-- "1" QualityClass
+
+CarBrand "1" *-- "1" Model
+
+
+Car <|-- RentableCar
+Brand <|-- CarBrand
+Model <|-- CarModel
+
+class User {
+-int id
+-String login
+-String password
 }
 
-enum TimeUnit {
-DAYS
-HOURS
-MINUTES
+interface Car {
+-int id
+-String name
+-String getFullName()
+}
+
+class RentableCar {
+-BigDecimal rentPrice
+}
+
+interface Brand {
+-String name
+}
+
+interface Model {
+-String name
+}
+
+enum Role {
+USER
+ADMIN
+MANAGER
+}
+
+enum QualityClass {
+AFFORDABLE
+DECENT
+EXTRA???
 }
 
 @enduml

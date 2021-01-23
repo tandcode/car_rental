@@ -1,6 +1,6 @@
 package com.epam.rd.java.final_project.car_rental.repository;
 
-import com.epam.rd.java.final_project.car_rental.domain.Message;
+import com.epam.rd.java.final_project.car_rental.entity.Message;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

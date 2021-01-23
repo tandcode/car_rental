@@ -5,8 +5,11 @@
     <title>Hello</title>
 </head>
 <body>
+    <a th:href="@{'?lang=en'}" th:text="#{lang.en}"></a>
+    <a th:href="@{'?lang=ua'}" th:text="#{lang.ua}"></a>
+
     <form th:action="@{/logout}" method="post">
-        <input type="submit" value="Sign Out"/>
+        <input type="submit" th:text="#{main.signout}"/>
     </form>
     <div>
         <form method="post">
