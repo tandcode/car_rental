@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 public class RegistrationController {
@@ -23,13 +24,15 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public String addUser(User user, Map<String, Object> model) {
-        User userFromDb = userRepository.findByUsername(user.getUsername());
-        if(userFromDb != null) {
+        Optional<User> userFromDb = userRepository.findByUsername(user.getUsername());
+        if(userFromDb.isPresent()) {
             model.put("message", "User exists!");
         }
-        user.setActive(true);
-        user.setRoles(Collections.singleton(Role.USER));
-        userRepository.save(user);
+        else {
+            user.setActive(true);
+            user.setRoles(Collections.singleton(Role.USER));
+            userRepository.save(user);
+        }
         return "redirect:/login";
     }
 }

@@ -2,15 +2,30 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <title>Spring Security Example </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{registration.page-name}"></title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+          crossorigin="anonymous">
+
+    <link th:href="@{/styles/all.css}" rel="stylesheet">
+    <link th:href="@{/styles/login.css}" rel="stylesheet">
 </head>
 <body>
-Add new user
-<span th:text="${message}"></span>
+<div th:replace="fragments/header :: header"></div>
+
+<main class="form-signin text-center">
     <form th:action="@{/registration}" method="post">
-        <div><label> User Name : <input type="text" name="username"/> </label></div>
-        <div><label> Password: <input type="password" name="password"/> </label></div>
-        <div><input type="submit" value="Registr"/></div>
-</form>
+        <h1 class="h3 mb-3 fw-normal" th:text="#{registration.invitation}"></h1>
+        <span th:text="${message}"></span>
+        <label for="inputUsername" class="visually-hidden">Username</label>
+        <input type="text" name="username" id="inputUsername" class="form-control" th:placeholder="#{login.username}" required>
+        <label for="inputPassword" class="visually-hidden">Password</label>
+        <input type="password" name="password" id="inputPassword" class="form-control" th:placeholder="#{login.password}" required>
+        <input class="w-100 btn btn-lg btn-primary" type="submit" th:value="#{login.signup}">
+    </form>
+</main>
 </body>
 </html>

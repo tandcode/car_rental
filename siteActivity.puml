@@ -1,0 +1,16 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+:Authetification/Registration;
+:Chosing car(with sorting available);
+:Filling order data(passport,
+driver/no driver, lease term);
+:Invoice generation;
+:Maneger review(mighth be dislined);
+:Manager registrate car returning
+(if there are demage, manager gives
+invoice for repair);
+stop
+
+@enduml

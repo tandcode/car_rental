@@ -2,6 +2,7 @@ package com.epam.rd.java.final_project.car_rental.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -13,6 +14,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(unique = true)
     private String username;
     private String password;
     private boolean active;

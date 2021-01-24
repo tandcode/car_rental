@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+          crossorigin="anonymous">
+</head>
+<body>
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm"
+    th:fragment="header">
+        <p class="h5 my-0 me-md-auto fw-normal" th:text="#{heading.company-name}"></p>
+        <nav class="my-2 my-md-0 me-md-3">
+            <a class="p-2 text-dark" th:text="#{header.main}" th:href="@{/}">Main</a>
+            <a class="p-2 text-dark" href="#">Enterprise</a>
+            <a class="p-2 text-dark" href="#">Support</a>
+            <a class="p-2 text-dark" href="#">Pricing</a>
+        </nav>
+
+        <span class="p-2 border">
+                <a class="p-2 text-dark" th:href="@{'?lang=en'}" th:text="#{lang.en}"></a>
+                <a class="p-2 text-dark" th:href="@{'?lang=ua'}" th:text="#{lang.ua}"></a>
+        </span>
+    </div>
+</body>
+</html>
