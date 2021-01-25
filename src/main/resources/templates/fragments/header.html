@@ -14,10 +14,14 @@
     th:fragment="header">
         <p class="h5 my-0 me-md-auto fw-normal" th:text="#{heading.company-name}"></p>
         <nav class="my-2 my-md-0 me-md-3">
-            <a sec:authorize="isAuthenticated()" class="p-2 text-dark"
+            <a sec:authorize="hasAuthority('ADMIN')" class="p-2 text-dark"
                th:text="#{header.users}" th:href="@{/user}">Users</a>
+
             <a class="p-2 text-dark" th:text="#{header.main}" th:href="@{/}">Main</a>
-            <a class="p-2 text-dark" href="#">Enterprise</a>
+
+            <a sec:authorize="isAuthenticated()" class="p-2 text-dark"
+               th:text="#{header.cars}" th:href="@{/car}">Users</a>
+
             <a class="p-2 text-dark" href="#">Support</a>
             <a class="p-2 text-dark" href="#">Pricing</a>
         </nav>

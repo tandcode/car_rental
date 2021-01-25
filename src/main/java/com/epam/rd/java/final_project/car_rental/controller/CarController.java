@@ -1,12 +1,18 @@
 package com.epam.rd.java.final_project.car_rental.controller;
 
+import com.epam.rd.java.final_project.car_rental.entity.Car;
+import com.epam.rd.java.final_project.car_rental.entity.CarBrand;
+import com.epam.rd.java.final_project.car_rental.entity.CarModel;
 import com.epam.rd.java.final_project.car_rental.repository.CarRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
+@Slf4j
 @Controller
 @RequestMapping("/car")
 public class CarController {
@@ -19,24 +25,26 @@ public class CarController {
         return "car-list";
     }
 
-//    @GetMapping("{user}")
-//    public String userEditForm(@PathVariable User user, Model model) {
-//        model.addAttribute(user);
-//        return "user-edit";
+    @GetMapping("/create")
+    private String carCreate(Model model){
+        model.addAttribute("car", new Car());
+        return "car-create";
+    }
+
+//    @ModelAttribute(name = "car")
+//    public Car car() {
+//        return new Car();
 //    }
-//
-//    @PostMapping
-//    public String userSave(
-//            @RequestParam("userId") User user,
-//            @RequestParam String username,
-//            @RequestParam(required = false) String manager
-//    ) {
-//        user.setUsername(username);
-//
-//        user.getRoles().clear();
-//        user.getRoles().add(manager != null ? Role.MANAGER : Role.USER);
-//
-//        userRepository.save(user);
-//        return "redirect:/user";
-//    }
+
+    @PostMapping("/create")
+    public String userSave(@Valid @ModelAttribute("car") Car car,
+                           @RequestParam String carBrand,
+                           @RequestParam String carModel,
+                           Model model) {
+        car.setCarBrand(CarBrand.builder().name(carBrand).build());
+        car.setCarModel(CarModel.builder().name(carModel).build());
+
+        carRepository.save(car);
+        return "redirect:/car";
+    }
 }

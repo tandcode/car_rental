@@ -1,7 +1,15 @@
 package com.epam.rd.java.final_project.car_rental.entity;
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 
 @Entity
 public class Car {
@@ -12,16 +20,24 @@ public class Car {
     String photoName;
 
     @ManyToOne
-    @JoinColumn(name = "brand_id", referencedColumnName = "id")
-    CarBrand brand;
+    @JoinTable(name = "car_brand",
+            joinColumns = @JoinColumn(name = "car_id"),
+            inverseJoinColumns = @JoinColumn(name = "brand_id"))
+    CarBrand carBrand;
 
     @ManyToOne
-    @JoinColumn(name = "model_id", referencedColumnName = "id")
-    CarModel model;
+    @JoinTable(name = "car_model",
+            joinColumns = @JoinColumn(name = "car_id"),
+            inverseJoinColumns = @JoinColumn(name = "model_id"))
+    CarModel carModel;
+
+    @Enumerated(EnumType.STRING)
+    QualityClass qualityClass;
 
     //price by one day
     BigDecimal rentPrice;
-    @ManyToOne
-    @JoinColumn(name = "quality_class_id", referencedColumnName = "id")
-    QualityClass qualityClass;
+
+    public static enum QualityClass {
+        AFFORDABLE, DECENT, ELITE;
+    }
 }
