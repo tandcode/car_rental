@@ -19,17 +19,9 @@ public class Car {
 
     String photoName;
 
-    @ManyToOne
-    @JoinTable(name = "car_brand",
-            joinColumns = @JoinColumn(name = "car_id"),
-            inverseJoinColumns = @JoinColumn(name = "brand_id"))
-    CarBrand carBrand;
+    String carBrand;
 
-    @ManyToOne
-    @JoinTable(name = "car_model",
-            joinColumns = @JoinColumn(name = "car_id"),
-            inverseJoinColumns = @JoinColumn(name = "model_id"))
-    CarModel carModel;
+    String carModel;
 
     @Enumerated(EnumType.STRING)
     QualityClass qualityClass;

@@ -1,14 +1,15 @@
 package com.epam.rd.java.final_project.car_rental.controller;
 
 import com.epam.rd.java.final_project.car_rental.entity.Car;
-import com.epam.rd.java.final_project.car_rental.entity.CarBrand;
-import com.epam.rd.java.final_project.car_rental.entity.CarModel;
 import com.epam.rd.java.final_project.car_rental.repository.CarRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
@@ -38,12 +39,7 @@ public class CarController {
 
     @PostMapping("/create")
     public String userSave(@Valid @ModelAttribute("car") Car car,
-                           @RequestParam String carBrand,
-                           @RequestParam String carModel,
                            Model model) {
-        car.setCarBrand(CarBrand.builder().name(carBrand).build());
-        car.setCarModel(CarModel.builder().name(carModel).build());
-
         carRepository.save(car);
         return "redirect:/car";
     }

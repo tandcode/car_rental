@@ -37,7 +37,7 @@
                     <td><img th:src="@{'/images/car-list/'+${car.photoName}}" class="image-holder"></td>
                     <td><span th:text="${car.carBrand}">Brand</span></td>
                     <td><span th:text="${car.carModel}">Model</span></td>
-                    <td><span th:text="${car.qualityClass}">Quality class</span></td>
+                    <td><span th:text="${#strings.toLowerCase(car.qualityClass)}">Quality class</span></td>
                     <td><span th:text="${car.rentPrice}">Price</span></td>
                     <td><input class="w-100 btn btn-lg btn-primary" type="submit" th:value="#{car-list.rent}"></td>
                 </tr>
