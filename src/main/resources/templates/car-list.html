@@ -33,7 +33,7 @@
                 </thead>
                 <tbody>
 
-                <tr th:each="car : ${cars}">
+                <tr th:each="car : ${carPage.content}">
                     <td><img th:src="@{'/images/car-list/'+${car.photoName}}" class="image-holder"></td>
                     <td><span th:text="${car.carBrand}">Brand</span></td>
                     <td><span th:text="${car.carModel}">Model</span></td>
@@ -43,6 +43,20 @@
                 </tr>
                 </tbody>
             </table>
+<!--            <div th:if="${carPage.totalPages > 0}" class="pagination"-->
+<!--                 th:each="pageNumber : ${pageNumbers}">-->
+<!--                <a th:href="@{/car(size=${carPage.size}, page=${pageNumber})}"-->
+<!--                   th:text="${pageNumber}"-->
+<!--                   th:class="${pageNumber==carPage.number + 1} ? active"></a>-->
+<!--            </div>-->
+
+            <div th:if="${carPage.totalPages > 0}" th:each="pageNumber : ${pageNumbers}"
+                 class="btn-group" role="group" aria-label="Pages">
+                <a class="btn btn-outline-primary" th:href="@{/car(size=${carPage.size}, page=${pageNumber})}"
+                   th:text="${pageNumber}"
+                   th:class="(${pageNumber==carPage.number + 1} ? 'active')+' btn btn-outline-primary'">
+                </a>
+            </div>
         </div>
 </div>
 </body>
