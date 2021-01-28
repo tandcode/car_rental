@@ -63,7 +63,17 @@
                 <td><span th:text="${car.carModel}">Model</span></td>
                 <td><span th:text="${#strings.toLowerCase(car.qualityClass)}">Quality class</span></td>
                 <td class="col-1"><span th:text="${car.rentPrice}">Price</span></td>
-                <td class="col-2"><input class="w-100 btn btn-lg btn-primary" type="submit" th:value="#{car-list.rent}"></td>
+                <td class="col-2">
+                    <a th:href="@{'/car/rent/'+${car.id}}"
+                       class="m-2 w-100 btn btn-lg btn-primary" th:text="#{car-list.rent}"></a>
+                    <a sec:authorize="hasAuthority('ADMIN')"
+                       th:href="@{'/car/edit/'+${car.id}}"
+                       class="m-2 w-100 btn btn-lg btn-primary" th:text="#{car-edit.edit}"></a>
+                    <a sec:authorize="hasAuthority('ADMIN')"
+                       th:href="@{'/car/delete/'+${car.id}}"
+                       class="m-2 w-100 btn btn-lg btn-danger" th:text="#{car-list.delete}"></a>
+                </td>
+
             </tr>
             </tbody>
         </table>

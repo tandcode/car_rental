@@ -3,17 +3,13 @@ package com.epam.rd.java.final_project.car_rental.controller;
 import com.epam.rd.java.final_project.car_rental.entity.Role;
 import com.epam.rd.java.final_project.car_rental.entity.User;
 import com.epam.rd.java.final_project.car_rental.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+@Slf4j
 @Controller
 @RequestMapping("/user")
 public class UserController {
@@ -43,6 +39,7 @@ public class UserController {
         user.getRoles().clear();
         user.getRoles().add(manager != null ? Role.MANAGER : Role.USER);
 
+        log.info("Creating user: " + user);
         userRepository.save(user);
         return "redirect:/user";
     }

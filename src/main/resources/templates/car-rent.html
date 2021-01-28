@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{car-list.page-name}"></title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+          crossorigin="anonymous">
+
+    <link th:href="@{/styles/all.css}" rel="stylesheet">
+    <link th:href="@{/styles/car-list.css}" rel="stylesheet">
+</head>
+<body>
+    <div th:replace="fragments/header :: header"></div>
+
+    <div class="col col-lg-8 text-center justify-content-center" th:object="${car}">
+        <table class="table table-striped table-bordered">
+            <tbody>
+            <tr>
+                <td rowspan="5"><img th:src="@{'/images/car-list/'+${car.photoName}}" class="image-holder"></td>
+            </tr>
+            <tr>
+                <td><span th:text="#{car-list.brand}">Brand</span></td>
+                <td><span th:text="*{carBrand}"></span></td>
+            </tr>
+            <tr>
+                <td><span th:text="#{car-list.model}">Model</span></td>
+                <td><span th:text="*{carModel}"></span></td>
+
+            </tr>
+            <tr>
+                <td><span th:text="#{car-list.quality-class}">Quality class</span></td>
+                <td><span th:text="*{#strings.toLowerCase(qualityClass)}"></span></td>
+            </tr>
+            <tr>
+                <td class="col-1"><span th:text="#{car-list.price}">Price</span></td>
+                <td class="col-1"><span th:text="*{rentPrice}"></span></td>
+            </tr>
+            <tr>
+                <td rowspan="5">
+                    <label for="days" class="visually-hidden" th:text="#{car-rent.days}">Days</label>
+                    <input type="text" name="days" id="days" class="form-control" required>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
