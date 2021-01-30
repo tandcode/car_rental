@@ -1,4 +1,4 @@
-package com.epam.rd.java.final_project.car_rental.entity;
+package com.tandcode.final_project.car_rental.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 

@@ -1,8 +1,8 @@
-package com.epam.rd.java.final_project.car_rental.controller;
+package com.tandcode.final_project.car_rental.controller;
 
-import com.epam.rd.java.final_project.car_rental.entity.Role;
-import com.epam.rd.java.final_project.car_rental.entity.User;
-import com.epam.rd.java.final_project.car_rental.repository.UserRepository;
+import com.tandcode.final_project.car_rental.entity.Role;
+import com.tandcode.final_project.car_rental.entity.User;
+import com.tandcode.final_project.car_rental.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

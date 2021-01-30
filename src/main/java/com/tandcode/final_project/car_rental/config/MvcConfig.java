@@ -1,4 +1,4 @@
-package com.epam.rd.java.final_project.car_rental.config;
+package com.tandcode.final_project.car_rental.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

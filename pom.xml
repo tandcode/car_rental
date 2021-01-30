@@ -8,7 +8,7 @@
 		<version>2.4.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.epam.rd.java.final_project</groupId>
+	<groupId>com.tandcode.final_project</groupId>
 	<artifactId>car_rental</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>car_rental</name>
@@ -83,6 +83,10 @@
 			<artifactId>lombok</artifactId>
 		</dependency>
 
+<!--		<dependency>-->
+<!--			<groupId>org.flywaydb</groupId>-->
+<!--			<artifactId>flyway-core</artifactId>-->
+<!--		</dependency>-->
 	</dependencies>
 
 	<build>

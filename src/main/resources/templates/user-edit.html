@@ -23,7 +23,7 @@
                    id="inputUsername" class="form-control" th:placeholder="#{login.username}" required>
 
             <input id="manager" class="btn-check" type ="checkbox" name="manager"
-                          th:checked="${#sets.contains(user.roles, T(com.epam.rd.java.final_project.car_rental.entity.Role).MANAGER)}">
+                          th:checked="${#sets.contains(user.roles, T(com.tandcode.final_project.car_rental.entity.Role).MANAGER)}">
             <label class="w-100 mb-2 btn btn-outline-warning" for="manager" th:text="#{user-edit.manager}">Manager</label>
 
             <input class="w-100 btn btn-lg btn-primary" type="submit" th:value="#{user-edit.change}">

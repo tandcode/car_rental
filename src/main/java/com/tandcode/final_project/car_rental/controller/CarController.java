@@ -1,8 +1,10 @@
-package com.epam.rd.java.final_project.car_rental.controller;
+package com.tandcode.final_project.car_rental.controller;
 
-import com.epam.rd.java.final_project.car_rental.entity.Car;
-import com.epam.rd.java.final_project.car_rental.repository.CarRepository;
-import com.epam.rd.java.final_project.car_rental.service.CarService;
+import com.tandcode.final_project.car_rental.entity.Car;
+import com.tandcode.final_project.car_rental.entity.CarBrand;
+import com.tandcode.final_project.car_rental.repository.CarBrandRepository;
+import com.tandcode.final_project.car_rental.repository.CarRepository;
+import com.tandcode.final_project.car_rental.service.CarService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,28 +26,43 @@ public class CarController {
     @Autowired
     private CarRepository carRepository;
     @Autowired
+    private CarBrandRepository carBrandRepository;
+
+    @Autowired
     private CarService carService;
 
     @GetMapping
     private String carList(Model model,
                            @RequestParam("page") Optional<Integer> page,
                            @RequestParam("size") Optional<Integer> size,
+                           @RequestParam("filterField") Optional<String> filteringField,
+                           @RequestParam("filterValue") Optional<String> filteringValue,
                            @RequestParam("sortField") Optional<String> sortingField,
                            @RequestParam("sortDir") Optional<String> sortingDir
     ){
+        // TODO migrate all logic from controllers to services
+        // TODO Optional: regional standards like money could be convertable based on language
+        // TODO Binding exception handler
+        // TODO save -> try catch + transactional
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(5);
+        String filterField = filteringField.orElse(null);
+        String filterValue = filteringValue.orElse(null);
         String sortField = sortingField.orElse("carBrand");
         String sortDir = sortingDir.orElse("asc");
 
         Page<Car> carPage = carService.findPaginated(
                 currentPage,
                 pageSize,
+                filterField,
+                filterValue,
                 sortField,
                 sortDir);
 
         model.addAttribute("carPage", carPage);
         model.addAttribute("sortField", sortField);
+        model.addAttribute("filterField", filterField);
+        model.addAttribute("filterValue", filterValue);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
 
@@ -71,17 +88,21 @@ public class CarController {
     @GetMapping("/create")
     private String carCreate(Model model){
         model.addAttribute("car", new Car());
+        model.addAttribute("carBrand", new CarBrand());
         return "car-create";
     }
 
     @PostMapping("/create")
-    public String userSave(@Valid @ModelAttribute("car") Car car,
+    public String carSave(@Valid @ModelAttribute("car") Car car,
+                           @Valid @ModelAttribute("carBrand") CarBrand carBrand,
                            Errors errors,
                            Model model) {
         if (errors.hasErrors()) {
             return "car-create";
         }
-
+        //TODO implement transactional
+        Optional<CarBrand> carBrandFromRepository = carBrandRepository.findByName(carBrand.getName());
+        car.setCarBrand(carBrandFromRepository.orElse(carBrand));
         log.info("Creating car: " + car);
         carRepository.save(car);
         return "redirect:/car";
@@ -95,7 +116,7 @@ public class CarController {
     }
 
     @PostMapping("/edit/{carId}")
-    public String userEditSave(@Valid @ModelAttribute("car") Car car,
+    public String carEditSave(@Valid @ModelAttribute("car") Car car,
                            Errors errors,
                            Model model) {
         if (errors.hasErrors()) {

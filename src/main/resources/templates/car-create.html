@@ -25,7 +25,7 @@
             <input type="text" th:field="*{photoName}" id="inputPhotoName" class="form-control" th:placeholder="#{car-create.photoName}+' /resources/images/car-list'" required>
 
             <label for="inputBrand" class="visually-hidden">Brand</label>
-            <input type="text" th:field="*{carBrand}" id="inputBrand" class="form-control" th:placeholder="#{car-create.brand}" required>
+            <input type="text" th:field="${carBrand.name}" id="inputBrand" class="form-control" th:placeholder="#{car-create.brand}" required>
 
             <label for="inputModel" class="visually-hidden">Model</label>
             <input type="text" th:field="*{carModel}" id="inputModel" class="form-control" th:placeholder="#{car-create.model}" required>

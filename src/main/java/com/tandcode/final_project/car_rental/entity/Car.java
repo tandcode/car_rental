@@ -1,8 +1,10 @@
-package com.epam.rd.java.final_project.car_rental.entity;
+package com.tandcode.final_project.car_rental.entity;
 
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 
@@ -22,8 +24,10 @@ public class Car {
     @NotBlank(message="Photo name is required")
     String photoName;
 
-    @NotBlank(message="Car brand is required")
-    String carBrand;
+//    @NotBlank(message="Car brand is required")
+    @ManyToOne
+    @JoinColumn(name="car_brand_id")
+    CarBrand carBrand;
 
     @NotBlank(message="Car model is required")
     String carModel;
@@ -32,7 +36,8 @@ public class Car {
     QualityClass qualityClass;
 
     //price by one day
-    @NotBlank(message="Price is required")
+    @DecimalMin(value = "0.0", inclusive = false)
+    @Digits(integer = 6, fraction = 2)
     BigDecimal rentPrice;
 
     public static enum QualityClass {

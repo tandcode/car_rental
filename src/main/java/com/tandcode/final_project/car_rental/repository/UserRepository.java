@@ -1,6 +1,6 @@
-package com.epam.rd.java.final_project.car_rental.repository;
+package com.tandcode.final_project.car_rental.repository;
 
-import com.epam.rd.java.final_project.car_rental.entity.User;
+import com.tandcode.final_project.car_rental.entity.User;
 import com.sun.istack.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,8 +1,7 @@
-package com.epam.rd.java.final_project.car_rental.entity;
+package com.tandcode.final_project.car_rental.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;

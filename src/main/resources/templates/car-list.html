@@ -32,7 +32,11 @@
         <a sec:authorize="hasAuthority('ADMIN')"
            class="btn btn-outline-primary" th:href="@{/car/create}" th:text="#{car-list.add}"></a>
     </div>
-
+    <div>
+        <select th:each="brand : ${distinctBrands}">
+            <option></option>
+        </select>
+    </div>
     <div class="col text-center justify-content-center">
         <table class="table table-striped table-bordered table-hover">
             <thead>
@@ -59,7 +63,7 @@
 
             <tr th:each="car : ${carPage.content}">
                 <td><img th:src="@{'/images/car-list/'+${car.photoName}}" class="image-holder"></td>
-                <td><span th:text="${car.carBrand}">Brand</span></td>
+                <td><span th:text="${car.carBrand.name}">Brand</span></td>
                 <td><span th:text="${car.carModel}">Model</span></td>
                 <td><span th:text="${#strings.toLowerCase(car.qualityClass)}">Quality class</span></td>
                 <td class="col-1"><span th:text="${car.rentPrice}">Price</span></td>
