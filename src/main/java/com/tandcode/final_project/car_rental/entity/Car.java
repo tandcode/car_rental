@@ -7,6 +7,8 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.HashSet;
 
 @Getter
 @Setter
@@ -32,7 +34,8 @@ public class Car {
     @NotBlank(message="Car model is required")
     String carModel;
 
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
+    @JoinColumn(name="quality_class_id")
     QualityClass qualityClass;
 
     //price by one day
@@ -40,7 +43,7 @@ public class Car {
     @Digits(integer = 6, fraction = 2)
     BigDecimal rentPrice;
 
-    public static enum QualityClass {
-        AFFORDABLE, DECENT, ELITE;
-    }
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    Collection<RentOrder> rentOrders = new HashSet<>();
+
 }

@@ -13,16 +13,16 @@ import java.util.Collection;
 @Builder
 
 @Entity
-public class CarBrand {
+public class QualityClass {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @NotBlank(message="Name is required")
-    @Column(name = "car_brand_name")
+    @Column(name = "quality_class_name")
     String name;
 
-    @OneToMany(mappedBy = "carBrand")
+    @OneToMany(mappedBy = "qualityClass")
     Collection<Car> cars;
 
 }

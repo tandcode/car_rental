@@ -2,8 +2,10 @@ package com.tandcode.final_project.car_rental.controller;
 
 import com.tandcode.final_project.car_rental.entity.Car;
 import com.tandcode.final_project.car_rental.entity.CarBrand;
+import com.tandcode.final_project.car_rental.entity.QualityClass;
 import com.tandcode.final_project.car_rental.repository.CarBrandRepository;
 import com.tandcode.final_project.car_rental.repository.CarRepository;
+import com.tandcode.final_project.car_rental.repository.QualityClassRepository;
 import com.tandcode.final_project.car_rental.service.CarService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +27,12 @@ import java.util.stream.IntStream;
 public class CarController {
     @Autowired
     private CarRepository carRepository;
+
     @Autowired
     private CarBrandRepository carBrandRepository;
+
+    @Autowired
+    private QualityClassRepository qualityClassRepository;
 
     @Autowired
     private CarService carService;
@@ -35,8 +41,8 @@ public class CarController {
     private String carList(Model model,
                            @RequestParam("page") Optional<Integer> page,
                            @RequestParam("size") Optional<Integer> size,
-                           @RequestParam("filterField") Optional<String> filteringField,
-                           @RequestParam("filterValue") Optional<String> filteringValue,
+                           @RequestParam("carBrandFilter") Optional<String> filteringCarBrand,
+                           @RequestParam("qualityClassFilter") Optional<String> filteringQualityClass,
                            @RequestParam("sortField") Optional<String> sortingField,
                            @RequestParam("sortDir") Optional<String> sortingDir
     ){
@@ -46,25 +52,27 @@ public class CarController {
         // TODO save -> try catch + transactional
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(5);
-        String filterField = filteringField.orElse(null);
-        String filterValue = filteringValue.orElse(null);
+        String carBrandFilter = filteringCarBrand.orElse("");
+        String qualityClassFilter = filteringQualityClass.orElse("");
         String sortField = sortingField.orElse("carBrand");
         String sortDir = sortingDir.orElse("asc");
 
         Page<Car> carPage = carService.findPaginated(
                 currentPage,
                 pageSize,
-                filterField,
-                filterValue,
+                carBrandFilter,
+                qualityClassFilter,
                 sortField,
                 sortDir);
 
         model.addAttribute("carPage", carPage);
         model.addAttribute("sortField", sortField);
-        model.addAttribute("filterField", filterField);
-        model.addAttribute("filterValue", filterValue);
+        model.addAttribute("carBrandFilter", carBrandFilter);
+        model.addAttribute("qualityClassFilter", qualityClassFilter);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        model.addAttribute("carBrands", carBrandRepository.findAll());
+        model.addAttribute("qualityClasses", qualityClassRepository.findAll());
 
         int totalPages = carPage.getTotalPages();
         if (totalPages > 0) {
@@ -76,33 +84,33 @@ public class CarController {
         return "car-list";
     }
 
-
-    @GetMapping("/rent/{carId}")
-    private String carRent(@PathVariable Long carId,
-                           Model model){
-        Optional<Car> car = carRepository.findById(carId);
-        model.addAttribute("car", car.orElseThrow());
-        return "car-rent";
-    }
-
     @GetMapping("/create")
     private String carCreate(Model model){
         model.addAttribute("car", new Car());
-        model.addAttribute("carBrand", new CarBrand());
+        model.addAttribute("qualityClasses", qualityClassRepository.findAll());
+
         return "car-create";
     }
 
     @PostMapping("/create")
     public String carSave(@Valid @ModelAttribute("car") Car car,
-                           @Valid @ModelAttribute("carBrand") CarBrand carBrand,
-                           Errors errors,
-                           Model model) {
+                          @RequestParam("carBrandName") String carBrandName,
+                          @RequestParam("qualityClassId") String qualityClassId,
+                          Errors errors) {
         if (errors.hasErrors()) {
             return "car-create";
         }
         //TODO implement transactional
-        Optional<CarBrand> carBrandFromRepository = carBrandRepository.findByName(carBrand.getName());
-        car.setCarBrand(carBrandFromRepository.orElse(carBrand));
+        Optional<CarBrand> carBrandFromRepository = carBrandRepository.findByName(carBrandName);
+        CarBrand newCarBrand = CarBrand.builder().name(carBrandName).build();
+        if (carBrandFromRepository.isEmpty()){
+            carBrandRepository.save(newCarBrand);
+        }
+        car.setCarBrand(carBrandFromRepository.orElse(newCarBrand));
+
+        Optional<QualityClass> qualityClassFromRepository = qualityClassRepository.findById(Integer.valueOf(qualityClassId));
+        car.setQualityClass(qualityClassFromRepository.orElseThrow());
+
         log.info("Creating car: " + car);
         carRepository.save(car);
         return "redirect:/car";
@@ -112,16 +120,29 @@ public class CarController {
     private String carEdit(@PathVariable Long carId,
                            Model model){
         model.addAttribute("car", carRepository.findById(carId).orElseThrow());
+        model.addAttribute("qualityClasses", qualityClassRepository.findAll());
         return "car-edit";
     }
 
     @PostMapping("/edit/{carId}")
     public String carEditSave(@Valid @ModelAttribute("car") Car car,
-                           Errors errors,
-                           Model model) {
+                              @RequestParam("carBrandName") String carBrandName,
+                              @RequestParam("qualityClassId") String qualityClassId,
+                              Errors errors,
+                              Model model) {
         if (errors.hasErrors()) {
             return "car-create";
         }
+
+        Optional<CarBrand> carBrandFromRepository = carBrandRepository.findByName(carBrandName);
+        CarBrand newCarBrand = CarBrand.builder().name(carBrandName).build();
+        if (carBrandFromRepository.isEmpty()){
+            carBrandRepository.save(newCarBrand);
+        }
+        car.setCarBrand(carBrandFromRepository.orElse(newCarBrand));
+
+        Optional<QualityClass> qualityClassFromRepository = qualityClassRepository.findById(Integer.valueOf(qualityClassId));
+        car.setQualityClass(qualityClassFromRepository.orElseThrow());
 
         log.info("Editing car: " + car);
         carRepository.save(car);
@@ -131,8 +152,8 @@ public class CarController {
     @GetMapping("/delete/{carId}")
     private String carDelete(@PathVariable Long carId,
                            Model model){
-//        log.info("Creating car: " + car);
-        model.addAttribute("car", carRepository.findById(carId).orElseThrow());
-        return "car-edit";
+        log.info("Deleting car: " +  carRepository.findById(carId));
+        carRepository.deleteById(carId);
+        return "redirect:/car";
     }
 }

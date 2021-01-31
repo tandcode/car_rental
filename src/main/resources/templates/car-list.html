@@ -29,13 +29,33 @@
                th:href="@{/car(size=${curSize}, sortField=${sortField}, sortDir=${sortDir})}" th:text="${curSize}">
             </a>
         </div>
+        <div >
+<!--            th:with="localCarBrandFilter=${carBrandFilter}"-->
+            <form th:action="@{/car(size=${carPage.size}, sortField=${sortField}, sortDir=${sortDir},
+            carBrandFilter=${carBrandFilter}, qualityClassFilter=${qualityClassFilter})}">
+                <select th:name="carBrandFilter">
+                    <option th:text="#{car-list.filter-brand}" value="">Car brand</option>
+                    <option th:each="carBrand : ${carBrands}" th:value="${carBrand.name}" th:text="${carBrand.name}">Car brand</option>
+                </select>
+                <select th:name="qualityClassFilter">
+                    <option th:text="#{car-list.filter-quality-class}" value="">Quality class</option>
+                    <option th:each="qulityClass : ${qualityClasses}" th:value="${qulityClass.name}" th:text="${qulityClass.name}">Quality class</option>
+                </select>
+                <input class="btn btn-outline-primary" type="submit" th:value="#{car-list.filter}"/>
+            </form>
+
+<!--            <a class="btn btn-outline-primary"-->
+<!--               th:href="@{/car(size=${carPage.size}, sortField=${sortField}, sortDir=${sortDir}, carBrandFilter=${localCarBrandFilter})}" th:text="#{car-list.filter}">-->
+<!--            </a>-->
+        </div>
+        </div>
         <a sec:authorize="hasAuthority('ADMIN')"
            class="btn btn-outline-primary" th:href="@{/car/create}" th:text="#{car-list.add}"></a>
     </div>
     <div>
-        <select th:each="brand : ${distinctBrands}">
-            <option></option>
-        </select>
+<!--        <select th:each="brand : ${distinctBrands}">-->
+<!--            <option></option>-->
+<!--        </select>-->
     </div>
     <div class="col text-center justify-content-center">
         <table class="table table-striped table-bordered table-hover">
@@ -65,7 +85,7 @@
                 <td><img th:src="@{'/images/car-list/'+${car.photoName}}" class="image-holder"></td>
                 <td><span th:text="${car.carBrand.name}">Brand</span></td>
                 <td><span th:text="${car.carModel}">Model</span></td>
-                <td><span th:text="${#strings.toLowerCase(car.qualityClass)}">Quality class</span></td>
+                <td><span th:text="${car.qualityClass.name}">Quality class</span></td>
                 <td class="col-1"><span th:text="${car.rentPrice}">Price</span></td>
                 <td class="col-2">
                     <a th:href="@{'/car/rent/'+${car.id}}"

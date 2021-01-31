@@ -21,25 +21,21 @@
         </div>
         <form th:action="@{/car/create}" th:object="${car}" method="post">
             <h1 class="h3 mb-3 fw-normal" th:text="#{car-create.invitation}"></h1>
-            <label for="inputPhotoName" class="visually-hidden">Photo</label>
-            <input type="text" th:field="*{photoName}" id="inputPhotoName" class="form-control" th:placeholder="#{car-create.photoName}+' /resources/images/car-list'" required>
+            <label for="photoName" class="visually-hidden">Photo</label>
+            <input type="text" th:field="*{photoName}" id="photoName" class="form-control" th:placeholder="#{car-create.photoName}+' /resources/images/car-list'" required>
 
-            <label for="inputBrand" class="visually-hidden">Brand</label>
-            <input type="text" th:field="${carBrand.name}" id="inputBrand" class="form-control" th:placeholder="#{car-create.brand}" required>
+            <label for="carBrand" class="visually-hidden">Brand</label>
+            <input type="text" th:name="carBrandName" id="carBrand"  class="form-control" th:placeholder="#{car-create.brand}" required>
 
-            <label for="inputModel" class="visually-hidden">Model</label>
-            <input type="text" th:field="*{carModel}" id="inputModel" class="form-control" th:placeholder="#{car-create.model}" required>
+            <label for="carModel" class="visually-hidden">Model</label>
+            <input type="text" th:field="${car.carModel}" id="carModel" class="form-control" th:placeholder="#{car-create.model}" required>
 
-            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                <input type="radio" class="btn-check" name="qualityClass" id="affordable" th:value="AFFORDABLE" autocomplete="off">
-                <label class="btn btn-outline-primary" for="affordable" th:text="#{car-create.affordable}"></label>
+            <select name="qualityClassId" id="qualityClassId">
+                <option th:each="curQualityClass : ${qualityClasses}" th:value="${curQualityClass.id}"
+                        th:text="#{${'car-create.' + curQualityClass.name}}"
+                        th:selected="${curQualityClass==car.qualityClass}">Quality class</option>
+            </select>
 
-                <input type="radio" class="btn-check" name="qualityClass" id="decent" th:value="DECENT" autocomplete="off" checked>
-                <label class="btn btn-outline-primary" for="decent" th:text="#{car-create.decent}"></label>
-
-                <input type="radio" class="btn-check" name="qualityClass" id="elite" th:value="ELITE" autocomplete="off">
-                <label class="btn btn-outline-primary" for="elite" th:text="#{car-create.elite}"></label>
-            </div>
             <label for="inputPrice" class="visually-hidden">Price</label>
             <input type="text" th:field="*{rentPrice}" id="inputPrice" class="form-control" th:placeholder="#{car-create.price}" required>
             <input class="w-100 btn btn-lg btn-primary" type="submit" th:value="#{car-create.add}">
