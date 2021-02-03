@@ -116,17 +116,20 @@ public class CarController {
         return "redirect:/car";
     }
 
+    //TODO car edition finish
     @GetMapping("/edit/{carId}")
     private String carEdit(@PathVariable Long carId,
                            Model model){
-        model.addAttribute("car", carRepository.findById(carId).orElseThrow());
+        Car car = carRepository.findById(carId).orElseThrow();
+        model.addAttribute("car", car);
+        model.addAttribute("carBrandName", car.getCarBrand().getName());
         model.addAttribute("qualityClasses", qualityClassRepository.findAll());
         return "car-edit";
     }
 
     @PostMapping("/edit/{carId}")
     public String carEditSave(@Valid @ModelAttribute("car") Car car,
-                              @RequestParam("carBrandName") String carBrandName,
+                              @ModelAttribute("carBrandName") String carBrandName,
                               @RequestParam("qualityClassId") String qualityClassId,
                               Errors errors,
                               Model model) {

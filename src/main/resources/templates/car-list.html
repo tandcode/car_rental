@@ -30,7 +30,6 @@
             </a>
         </div>
         <div >
-<!--            th:with="localCarBrandFilter=${carBrandFilter}"-->
             <form th:action="@{/car(size=${carPage.size}, sortField=${sortField}, sortDir=${sortDir},
             carBrandFilter=${carBrandFilter}, qualityClassFilter=${qualityClassFilter})}">
                 <select th:name="carBrandFilter">
@@ -44,18 +43,12 @@
                 <input class="btn btn-outline-primary" type="submit" th:value="#{car-list.filter}"/>
             </form>
 
-<!--            <a class="btn btn-outline-primary"-->
-<!--               th:href="@{/car(size=${carPage.size}, sortField=${sortField}, sortDir=${sortDir}, carBrandFilter=${localCarBrandFilter})}" th:text="#{car-list.filter}">-->
-<!--            </a>-->
         </div>
         </div>
         <a sec:authorize="hasAuthority('ADMIN')"
            class="btn btn-outline-primary" th:href="@{/car/create}" th:text="#{car-list.add}"></a>
     </div>
     <div>
-<!--        <select th:each="brand : ${distinctBrands}">-->
-<!--            <option></option>-->
-<!--        </select>-->
     </div>
     <div class="col text-center justify-content-center">
         <table class="table table-striped table-bordered table-hover">
@@ -96,6 +89,7 @@
                     <a sec:authorize="hasAuthority('ADMIN')"
                        th:href="@{'/car/delete/'+${car.id}}"
                        class="m-2 w-100 btn btn-lg btn-danger" th:text="#{car-list.delete}"></a>
+                    <span sec:authorize="hasAuthority('ADMIN')" th:text="${car.isInUsage} ? #{car-list.in-usage} : #{car-list.available}"></span>
                 </td>
 
             </tr>

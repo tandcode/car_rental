@@ -5,15 +5,12 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString
 
 @Entity
 public class RentOrder {
@@ -36,4 +33,22 @@ public class RentOrder {
     @JoinColumn(name="passport_id")
     Passport passport;
 
+    @Enumerated(EnumType.STRING)
+    OrderStatus orderStatus;
+
+    @Override
+    public String toString() {
+        return "RentOrder{" +
+                "id=" + id +
+                ", days=" + days +
+                ", withDriver=" + withDriver +
+                ", car=" + car +
+                ", passport=" + passport +
+                ", orderStatus=" + orderStatus +
+                '}';
+    }
+
+    public enum OrderStatus {
+        NEW, REJECTED, UNPAID, PAID, IN_USAGE, UNPAID_REPAIR, CLOSED;
+    }
 }

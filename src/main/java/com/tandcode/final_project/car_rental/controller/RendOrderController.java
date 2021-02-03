@@ -68,6 +68,7 @@ public class RendOrderController {
         rentOrder.setPassport(passport);
 
         rentOrder.setCar(car);
+        rentOrder.setOrderStatus(RentOrder.OrderStatus.NEW);
         log.info("Creating rent order: " + rentOrder);
         rentOrderRepository.save(rentOrder);
         return "redirect:/car";

@@ -30,27 +30,20 @@ public class CarService {
 
         Pageable pageable = PageRequest.of(currentPage - 1, pageSize, sort);
 
-
         Page<Car> page;
 
-//        switch (carBrandFilter) {
-//            case "carBrand" : page = carRepository.findAllByCarBrand(carBrandFilter, pageable);
-//            case "qualityClass" : page = carRepository.findAllByQualityClass(qualityClassFilter, pageable);
-//            default: page = carRepository.findAll(pageable);
-//        }
-
-        //TODO refactor this
+        //TODO refactor this and allow admin to see full list of cars with cars in usage
         if(!"".equals(carBrandFilter) && !"".equals(qualityClassFilter)) {
-            page = carRepository.findAllByCarBrand_NameAndQualityClass_Name(carBrandFilter, qualityClassFilter, pageable);
+            page = carRepository.findAllByIsInUsageAndCarBrand_NameAndQualityClass_Name(false, carBrandFilter, qualityClassFilter, pageable);
         }
         else if(!"".equals(carBrandFilter)){
-            page = carRepository.findAllByCarBrand_Name(carBrandFilter, pageable);
+            page = carRepository.findAllByIsInUsageAndCarBrand_Name(false, carBrandFilter, pageable);
         }
         else if(!"".equals(qualityClassFilter)){
-            page = carRepository.findAllByQualityClass_Name(qualityClassFilter, pageable);
+            page = carRepository.findAllByIsInUsageAndQualityClass_Name(false, qualityClassFilter, pageable);
         }
         else{
-            page = carRepository.findAll(pageable);
+            page = carRepository.findAllByIsInUsage(false, pageable);
         }
         return page;
     }

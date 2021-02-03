@@ -25,4 +25,11 @@ public class QualityClass {
     @OneToMany(mappedBy = "qualityClass")
     Collection<Car> cars;
 
+    @Override
+    public String toString() {
+        return "QualityClass{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

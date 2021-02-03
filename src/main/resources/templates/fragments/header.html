@@ -17,12 +17,13 @@
         <nav class="my-2 my-md-0 me-md-3">
             <a sec:authorize="hasAuthority('ADMIN')" class="p-2 text-dark"
                th:text="#{header.users}" th:href="@{/user}">Users</a>
+            <a sec:authorize="hasAuthority('MANAGER')" class="p-2 text-dark"
+               th:text="#{header.orders}" th:href="@{/management/order}">Orders</a>
 
             <a class="p-2 text-dark" th:text="#{header.main}" th:href="@{/}">Main</a>
 
             <a sec:authorize="isAuthenticated()" class="p-2 text-dark"
                th:text="#{header.cars}" th:href="@{/car}">Users</a>
-
         </nav>
 
         <span class="p-2 border">

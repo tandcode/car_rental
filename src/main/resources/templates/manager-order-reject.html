@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{manager-order-list.page-name}"></title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+          crossorigin="anonymous">
+
+    <link th:href="@{/styles/all.css}" rel="stylesheet">
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div>
+    <div class="row justify-content-center">
+        <div class="col col-lg-6 text-center justify-content-center">
+            <table class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th scope="col" th:text="#{manager-order-list.username}">Username</th>
+                    <th scope="col" th:text="#{manager-order-list.first-name}">First name</th>
+                    <th scope="col" th:text="#{manager-order-list.last-name}">Last name</th>
+                    <th scope="col" th:text="#{manager-order-list.passport-number}">Passport number</th>
+                    <th scope="col" th:text="#{manager-order-list.car-id}">Car id</th>
+                    <th scope="col" th:text="#{manager-order-list.price-per-day}">Price per day</th>
+                    <th scope="col" th:text="#{manager-order-list.days}">Days</th>
+                    <th scope="col" th:text="#{manager-order-list.status}">Status</th>
+                    <th scope="col" th:text="#{manager-order-list.options}">Options</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr >
+                    <td><span th:text="${rentOrder.passport.user.username}">Username</span></td>
+                    <td><span th:text="${rentOrder.passport.firstName}">First name</span></td>
+                    <td><span th:text="${rentOrder.passport.lastName}">Last name</span></td>
+                    <td><span th:text="${rentOrder.passport.passportNumber}">Passport number</span></td>
+                    <td><span th:text="${rentOrder.car.id}">Car id</span></td>
+                    <td><span th:text="${rentOrder.car.rentPrice}">Price per day</span></td>
+                    <td><span th:text="${rentOrder.days}">Days</span></td>
+                    <td><span th:text="${rentOrder.orderStatus}">Status</span></td>
+                    <td>
+                        <div th:if="${rentOrder.orderStatus.name() == 'NEW'}">
+                            <form th:action="@{'/management/order/'+${rentOrder.id}(submitNew=true)}" method="post">
+                                <input class="m-2 w-100 btn btn-lg btn-primary" type="submit" th:value="#{manager-order-list.submit-order}">
+                            </form>
+                            <form th:action="@{'/management/order/'+${rentOrder.id}(submitNew=false)}" method="post">
+                                <input class="m-2 w-100 btn btn-lg btn-danger" type="submit" th:value="#{manager-order-list.reject-order}">
+                            </form>
+                        </div>
+                        <div th:if="${rentOrder.orderStatus.name() == 'UNPAID'}">
+                            <form th:href="@{#}">
+                                <input class="m-2 w-100 btn btn-lg btn-primary" type="submit" th:value="#{manager-order-list.email-invoice}">
+                            </form>
+                            <form th:action="@{'/management/order/'+${rentOrder.id}+'/paid'}" method="post">
+                                <input class="m-2 w-100 btn btn-lg btn-success" type="submit" th:value="#{manager-order-list.submit-payment}">
+                            </form>
+                        </div>
+<!--                        TODO implement excluding car from car list-->
+                        <div th:if="${rentOrder.orderStatus.name() == 'PAID'}">
+                            <form th:href="@{'/management/order/'+${rentOrder.id}+'/closed'}">
+                                <input class="m-2 w-100 btn btn-lg btn-warning" type="submit" th:value="#{manager-order-list.close-order}">
+                            </form>
+                            <form th:action="@{'/management/order/'+${rentOrder.id}+'/in-usage'}" method="post">
+                                <input class="m-2 w-100 btn btn-lg btn-success" type="submit" th:value="#{manager-order-list.in-usage}">
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

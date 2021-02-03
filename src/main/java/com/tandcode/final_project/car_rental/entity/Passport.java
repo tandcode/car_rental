@@ -35,4 +35,15 @@ public class Passport {
 
     @OneToMany(mappedBy = "passport")
     Collection<RentOrder> rentOrders;
+
+    @Override
+    public String toString() {
+        return "Passport{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", passportNumber='" + passportNumber + '\'' +
+                ", user=" + user +
+                '}';
+    }
 }

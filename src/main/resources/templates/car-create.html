@@ -32,8 +32,7 @@
 
             <select name="qualityClassId" id="qualityClassId">
                 <option th:each="curQualityClass : ${qualityClasses}" th:value="${curQualityClass.id}"
-                        th:text="#{${'car-create.' + curQualityClass.name}}"
-                        th:selected="${curQualityClass==car.qualityClass}">Quality class</option>
+                        th:text="#{${'car-create.' + curQualityClass.name}}">Quality class</option>
             </select>
 
             <label for="inputPrice" class="visually-hidden">Price</label>

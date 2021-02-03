@@ -24,14 +24,16 @@
             <label for="photoName" class="visually-hidden">Photo</label>
             <input type="text" th:field="*{photoName}" id="photoName" class="form-control" th:placeholder="#{car-create.photoName}+' /resources/images/car-list'" required>
 
-            <label for="carBrand" class="visually-hidden">Brand</label>
-            <input type="text" th:name="carBrandName" id="carBrand"  class="form-control" th:placeholder="#{car-create.brand}" required>
+            <label for="carBrandName" class="visually-hidden">Brand</label>
+            <input type="text" th:field="${carBrandName}" id="carBrandName"  class="form-control" th:placeholder="#{car-create.brand}" required>
 
             <label for="carModel" class="visually-hidden">Model</label>
-            <input type="text" th:field="${car.carModel}" id="carModel" class="form-control" th:placeholder="#{car-create.model}" required>
+            <input type="text" th:field="*{carModel}" id="carModel" class="form-control" th:placeholder="#{car-create.model}" required>
 
             <select th:name="qualityClassId">
-                <option th:each="curQualityClass : ${qualityClasses}" th:value="${curQualityClass.id}" th:text="#{${'car-create.' + curQualityClass.name}}">Quality class</option>
+                <option th:each="curQualityClass : ${qualityClasses}" th:value="${curQualityClass.id}"
+                        th:text="#{${'car-create.' + curQualityClass.name}}"
+                        th:selected="${curQualityClass==car.qualityClass}">Quality class</option>
             </select>
 
             <label for="inputPrice" class="visually-hidden">Price</label>

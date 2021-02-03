@@ -15,7 +15,6 @@ import java.util.HashSet;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString
 
 @Entity
 public class Car {
@@ -26,7 +25,6 @@ public class Car {
     @NotBlank(message="Photo name is required")
     String photoName;
 
-//    @NotBlank(message="Car brand is required")
     @ManyToOne
     @JoinColumn(name="car_brand_id")
     CarBrand carBrand;
@@ -43,7 +41,21 @@ public class Car {
     @Digits(integer = 6, fraction = 2)
     BigDecimal rentPrice;
 
+    Boolean isInUsage;
+
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     Collection<RentOrder> rentOrders = new HashSet<>();
 
+    @Override
+    public String toString() {
+        return "Car{" +
+                "id=" + id +
+                ", photoName='" + photoName + '\'' +
+                ", carBrand=" + carBrand +
+                ", carModel='" + carModel + '\'' +
+                ", qualityClass=" + qualityClass +
+                ", rentPrice=" + rentPrice +
+                ", isInUsage=" + isInUsage +
+                '}';
+    }
 }
