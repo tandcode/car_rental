@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title th:text="#{manager-order-reject.reject}"></title>
+    <title th:text="#{manager-order-repair.page-name}"></title>
 
     <link th:href="@{/styles/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/styles/all.css}" rel="stylesheet">
@@ -38,14 +38,16 @@
                 </tbody>
             </table>
             <div>
-                <span th:text="#{manager-order-reject.reject-reason}"></span>
+                <span th:text="#{manager-order-repair.repair}"></span>
                 <div class="form-outline">
-                    <form th:action="@{'/management/order/'+${rentOrder.id}+'/reject'}" th:object="${rentOrder}" method="post">
-                        <textarea class="form-control" id="rejectReason"
-                                  th:field="*{rejectReason}"
-                                  th:placeholder="#{manager-order-reject.description}" rows="4"></textarea>
-                        <label class="visually-hidden" for="rejectReason">Description</label>
-                        <input class="m-2 w-100 btn btn-lg btn-primary" type="submit" th:value="#{manager-order-reject.save}">
+                    <form th:action="@{'/management/order/'+${rentOrder.id}+'/repair-payment'}" th:object="${rentOrder}" method="post">
+                        <label for="inputPrice" class="visually-hidden">Price</label>
+                        <input type="text" th:field="*{repairPrice}" id="inputPrice" class="form-control" th:placeholder="#{manager-order-repair.price}" required>
+                        <textarea class="form-control" id="repairDescription"
+                                  th:field="*{repairDescription}"
+                                  th:placeholder="#{manager-order-repair.description}" rows="4"></textarea>
+                        <label class="visually-hidden" for="repairDescription">Description</label>
+                        <input class="m-2 w-100 btn btn-lg btn-primary" type="submit" th:value="#{manager-order-repair.save}">
                     </form>
                 </div>
             </div>

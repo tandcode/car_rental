@@ -21,8 +21,9 @@ public class UserService implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(String username)  {
-        return userRepository.findByUsername(username).orElseThrow();
+    public User loadUserByUsername(String username)  {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid username: " + username));
     }
 
     public boolean addUser(User user) {

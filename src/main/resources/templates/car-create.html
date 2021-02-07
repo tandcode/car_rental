@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="#{login.page-name}"></title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
-          rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
-          crossorigin="anonymous">
-
+    <link th:href="@{/styles/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/styles/all.css}" rel="stylesheet">
     <link th:href="@{/styles/car-create.css}" rel="stylesheet">
 </head>
@@ -21,8 +18,11 @@
         </div>
         <form th:action="@{/car/create}" th:object="${car}" method="post">
             <h1 class="h3 mb-3 fw-normal" th:text="#{car-create.invitation}"></h1>
-            <label for="photoName" class="visually-hidden">Photo</label>
-            <input type="text" th:field="*{photoName}" id="photoName" class="form-control" th:placeholder="#{car-create.photoName}+' /resources/images/car-list'" required>
+            <input type="hidden" name="isInUsage" th:field="*{isInUsage}" th:value="false">
+            <div class="form-outline">
+                <label for="photoName" class="visually-hidden">Photo</label>
+                <input type="text" th:field="*{photoName}" id="photoName" class="form-control" th:placeholder="#{car-create.photoName}+' /resources/images/car-list'" required>
+            </div>
 
             <label for="carBrand" class="visually-hidden">Brand</label>
             <input type="text" th:name="carBrandName" id="carBrand"  class="form-control" th:placeholder="#{car-create.brand}" required>

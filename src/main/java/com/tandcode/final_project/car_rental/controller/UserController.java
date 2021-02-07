@@ -27,19 +27,18 @@ public class UserController {
         model.addAttribute(user);
         return "user-edit";
     }
-    //TODO user edition finish
     @PostMapping
     public String userSave(
             @RequestParam("userId") User user,
             @RequestParam String username,
-            @RequestParam(required = false) String manager
+            @RequestParam(required = false) String manager,
+            @RequestParam(required = false) String active
     ) {
         user.setUsername(username);
-
         user.getRoles().clear();
         user.getRoles().add(manager != null ? Role.MANAGER : Role.USER);
-
-        log.info("Creating user: " + user);
+        user.setActive("on".equals(active));
+        log.info("Creating/Updating user: " + user);
         userRepository.save(user);
         return "redirect:/user";
     }

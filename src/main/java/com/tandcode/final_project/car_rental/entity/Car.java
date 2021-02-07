@@ -7,6 +7,7 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -36,7 +37,6 @@ public class Car {
     @JoinColumn(name="quality_class_id")
     QualityClass qualityClass;
 
-    //price by one day
     @DecimalMin(value = "0.0", inclusive = false)
     @Digits(integer = 6, fraction = 2)
     BigDecimal rentPrice;
@@ -44,7 +44,7 @@ public class Car {
     Boolean isInUsage;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
-    Collection<RentOrder> rentOrders = new HashSet<>();
+    Collection<RentOrder> rentOrders = new ArrayList<>();
 
     @Override
     public String toString() {

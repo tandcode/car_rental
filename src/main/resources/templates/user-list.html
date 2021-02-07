@@ -5,14 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="#{user-list.page-name}"></title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
-          rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
-          crossorigin="anonymous">
+    <link th:href="@{/styles/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/styles/all.css}" rel="stylesheet">
 </head>
 <body>
 <div th:replace="fragments/header :: header"></div>
-<!--TODO exclude admin from user list-->
 <div>
     <div class="row justify-content-center">
         <div class="col col-lg-6 text-center justify-content-center">
@@ -22,6 +19,7 @@
                     <th scope="col" th:text="#{user-list.username}">Username</th>
                     <th scope="col" th:text="#{user-list.email}">Email</th>
                     <th scope="col" th:text="#{user-list.role}">Role</th>
+                    <th scope="col" th:text="#{user-list.active}">Active</th>
                     <th scope="col"></th>
                 </tr>
                 </thead>
@@ -31,9 +29,10 @@
                     <td><span th:text="${user.email}">Email</span></td>
                     <td>
                         <div th:each="role : ${user.roles}">
-                            <span th:text="${role}"> Role </span>
+                            <span th:text="#{'user-list.role.'+${role}}"> Role </span>
                         </div>
                     </td>
+                    <td><span th:text="#{'user-list.active.'+${user.active}}">Active</span></td>
                     <td>
                         <a th:href="@{'/user/'+${user.id}}" th:text="#{user-list.edit}"></a>
                     </td>

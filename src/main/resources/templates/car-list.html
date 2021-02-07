@@ -6,10 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="#{car-list.page-name}"></title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
-          rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
-          crossorigin="anonymous">
-
+    <link th:href="@{/styles/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/styles/all.css}" rel="stylesheet">
     <link th:href="@{/styles/car-list.css}" rel="stylesheet">
 </head>
@@ -31,14 +28,16 @@
         </div>
         <div >
             <form th:action="@{/car(size=${carPage.size}, sortField=${sortField}, sortDir=${sortDir},
-            carBrandFilter=${carBrandFilter}, qualityClassFilter=${qualityClassFilter})}">
+            carBrandFilter=${carBrandFilter}, qualityClassFilter=${qualityClassFilter}) }">
                 <select th:name="carBrandFilter">
                     <option th:text="#{car-list.filter-brand}" value="">Car brand</option>
-                    <option th:each="carBrand : ${carBrands}" th:value="${carBrand.name}" th:text="${carBrand.name}">Car brand</option>
+                    <option th:each="carBrand : ${carBrands}" th:value="${carBrand.name}"
+                            th:text="${carBrand.name}">Car brand</option>
                 </select>
                 <select th:name="qualityClassFilter">
                     <option th:text="#{car-list.filter-quality-class}" value="">Quality class</option>
-                    <option th:each="qulityClass : ${qualityClasses}" th:value="${qulityClass.name}" th:text="${qulityClass.name}">Quality class</option>
+                    <option th:each="qualityClass : ${qualityClasses}" th:value="${qualityClass.name}"
+                            th:text="#{'quality-class.'+${qualityClass.name}}">Quality class</option>
                 </select>
                 <input class="btn btn-outline-primary" type="submit" th:value="#{car-list.filter}"/>
             </form>
@@ -54,6 +53,7 @@
         <table class="table table-striped table-bordered table-hover">
             <thead>
             <tr>
+                <th sec:authorize="hasAnyAuthority('MANAGER', 'ADMIN')" scope="col" class="col-1" th:text="#{car-list.id}">Id</th>
                 <th scope="col" class="col-4" th:text="#{car-list.photo}">Photo</th>
                 <th scope="col" class="col-2">
                     <a th:href="@{/car(size=${carPage.size}, sortField='carBrand', sortDir=${reverseSortDir})}"
@@ -75,13 +75,15 @@
             <tbody>
 
             <tr th:each="car : ${carPage.content}">
+                <td sec:authorize="hasAnyAuthority('MANAGER', 'ADMIN')"><span th:text="${car.id}">Id</span></td>
                 <td><img th:src="@{'/images/car-list/'+${car.photoName}}" class="image-holder"></td>
                 <td><span th:text="${car.carBrand.name}">Brand</span></td>
                 <td><span th:text="${car.carModel}">Model</span></td>
-                <td><span th:text="${car.qualityClass.name}">Quality class</span></td>
+                <td><span th:text="#{'quality-class.'+${car.qualityClass.name}}">Quality class</span></td>
                 <td class="col-1"><span th:text="${car.rentPrice}">Price</span></td>
                 <td class="col-2">
-                    <a th:href="@{'/car/rent/'+${car.id}}"
+                    <a sec:authorize="hasAuthority('USER')"
+                       th:href="@{'/car/rent/'+${car.id}}"
                        class="m-2 w-100 btn btn-lg btn-primary" th:text="#{car-list.rent}"></a>
                     <a sec:authorize="hasAuthority('ADMIN')"
                        th:href="@{'/car/edit/'+${car.id}}"
@@ -106,13 +108,13 @@
             </a>
         </div>
         <div class="btn-group px-2" role="group">
-            <a th:each="pageNumber : ${pageNumbers}"
+            <a th:each="pageNumber : ${#numbers.sequence(1, carPage.totalPages)}"
                th:href="@{/car(size=${carPage.size}, page=${pageNumber}, sortField=${sortField}, sortDir=${sortDir})}"
                th:text="${pageNumber}"
                th:class="'btn btn-outline-primary '+(${pageNumber==carPage.number + 1} ? 'active')">
             </a>
         </div>
-        <div class="btn-group" role="group" th:if="${carPage.number + 1 < pageNumbers.size}">
+        <div class="btn-group" role="group" th:if="${carPage.number + 1 < carPage.totalPages}">
             <a class="btn btn-outline-primary"
                th:href="@{/car(size=${carPage.size}, page=${carPage.number + 2}, sortField=${sortField}, sortDir=${sortDir})}"
                th:text="#{car-list.next}">

@@ -2,27 +2,40 @@ package com.tandcode.final_project.car_rental.service;
 
 import com.tandcode.final_project.car_rental.entity.Car;
 import com.tandcode.final_project.car_rental.entity.CarBrand;
+import com.tandcode.final_project.car_rental.entity.QualityClass;
 import com.tandcode.final_project.car_rental.repository.CarBrandRepository;
 import com.tandcode.final_project.car_rental.repository.CarRepository;
+import com.tandcode.final_project.car_rental.repository.QualityClassRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@Slf4j
 public class CarService {
 
     @Autowired
     CarRepository carRepository;
 
     @Autowired
-    private CarBrandRepository carBrandRepository;
+    CarBrandRepository carBrandRepository;
 
-    public Page<Car> findPaginated(int currentPage, int pageSize, String carBrandFilter,
+    @Autowired
+    QualityClassRepository qualityClassRepository;
+
+    public Page<Car> findPaginated(Authentication authentication, int currentPage, int pageSize, String carBrandFilter,
                                    String qualityClassFilter, String sortField, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortField).ascending()
@@ -30,25 +43,88 @@ public class CarService {
 
         Pageable pageable = PageRequest.of(currentPage - 1, pageSize, sort);
 
-        Page<Car> page;
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ADMIN"));
 
-        //TODO refactor this and allow admin to see full list of cars with cars in usage
-        if(!"".equals(carBrandFilter) && !"".equals(qualityClassFilter)) {
-            page = carRepository.findAllByIsInUsageAndCarBrand_NameAndQualityClass_Name(false, carBrandFilter, qualityClassFilter, pageable);
-        }
-        else if(!"".equals(carBrandFilter)){
-            page = carRepository.findAllByIsInUsageAndCarBrand_Name(false, carBrandFilter, pageable);
-        }
-        else if(!"".equals(qualityClassFilter)){
-            page = carRepository.findAllByIsInUsageAndQualityClass_Name(false, qualityClassFilter, pageable);
-        }
-        else{
-            page = carRepository.findAllByIsInUsage(false, pageable);
-        }
-        return page;
+        Specification<Car> carBrandSpec = CarSpecs.carCarBrandNameEquals(carBrandFilter);
+        Specification<Car> qualityClassSpec = CarSpecs.carQualityClass_NameEquals(qualityClassFilter);
+        Specification<Car> notInUsageSpec = CarSpecs.carIsInUsageEquals(false);
+
+        Specification<Car> userSpec = Specification.where(carBrandSpec).and(qualityClassSpec).and(notInUsageSpec);
+        Specification<Car> adminSpec = Specification.where(carBrandSpec).and(qualityClassSpec);
+
+        return carRepository.findAll(isAdmin ? adminSpec : userSpec, pageable);
     }
 
-    public List<CarBrand> findDistinctBrands() {
+    public List<CarBrand> findAllBrands() {
         return carBrandRepository.findAll();
+    }
+
+    public List<QualityClass> findAllQualityClasses() {
+        return qualityClassRepository.findAll();
+    }
+    public Optional<CarBrand> findCarBrandByName(String carBrandName) {
+        return carBrandRepository.findByName(carBrandName);
+    }
+
+    public void getCarList(Model model,
+                            Authentication authentication,
+                            @RequestParam("page") Optional<Integer> page,
+                            @RequestParam("size") Optional<Integer> size,
+                            @RequestParam("carBrandFilter") Optional<String> filteringCarBrand,
+                            @RequestParam("qualityClassFilter") Optional<String> filteringQualityClass,
+                            @RequestParam("sortField") Optional<String> sortingField,
+                            @RequestParam("sortDir") Optional<String> sortingDir) {
+        int currentPage = page.orElse(1);
+        int pageSize = size.orElse(5);
+        String carBrandFilter = filteringCarBrand.orElse("");
+        String qualityClassFilter = filteringQualityClass.orElse("");
+        String sortField = sortingField.orElse("carBrand");
+        String sortDir = sortingDir.orElse("asc");
+
+        Page<Car> carPage = findPaginated(
+                authentication,
+                currentPage,
+                pageSize,
+                carBrandFilter,
+                qualityClassFilter,
+                sortField,
+                sortDir);
+
+        model.addAttribute("carPage", carPage);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("carBrandFilter", carBrandFilter);
+        model.addAttribute("qualityClassFilter", qualityClassFilter);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        model.addAttribute("carBrands", findAllBrands());
+        model.addAttribute("qualityClasses", findAllQualityClasses());
+    }
+
+    public Car findById(Long id) {
+        return carRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid car id: " + id));
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        log.info("Deleting car: " +  findById(id));
+        carRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void saveCar(Car car, String carBrandName, String qualityClassId, String logMessage) {
+        Optional<CarBrand> carBrandFromRepository = findCarBrandByName(carBrandName);
+        CarBrand newCarBrand = CarBrand.builder().name(carBrandName).build();
+        if (carBrandFromRepository.isEmpty()) {
+            carBrandRepository.save(newCarBrand);
+        }
+        Optional<QualityClass> qualityClassFromRepository = qualityClassRepository.findById(Integer.valueOf(qualityClassId));
+
+        car.setCarBrand(carBrandFromRepository.orElse(newCarBrand));
+        car.setQualityClass(qualityClassFromRepository.orElseThrow());
+
+        log.info(logMessage + car);
+        carRepository.save(car);
     }
 }

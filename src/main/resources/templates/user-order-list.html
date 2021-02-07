@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{user-order-list.page-name}"></title>
+
+    <link th:href="@{/styles/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/styles/all.css}" rel="stylesheet">
+    <link th:href="@{/styles/car-list.css}" rel="stylesheet">
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div>
+    <div class="row text-center">
+        <span th:text="#{user-order-list.my-order-list}"></span>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col col-lg-6 text-center justify-content-center">
+            <table class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th scope="col" th:text="#{user-order-list.id}">Id</th>
+                    <th scope="col" th:text="#{user-order-list.first-name}">First name</th>
+                    <th scope="col" th:text="#{user-order-list.last-name}">Last name</th>
+                    <th scope="col" th:text="#{user-order-list.passport-number}">Passport number</th>
+                    <th scope="col" th:text="#{user-order-list.car-id}">Car id</th>
+                    <th scope="col" th:text="#{user-order-list.car-photo}">Car photo</th>
+                    <th scope="col" th:text="#{user-order-list.car-brand}">Car brand</th>
+                    <th scope="col" th:text="#{user-order-list.car-model}">Car model</th>
+                    <th scope="col" th:text="#{user-order-list.price-per-day}">Price per day</th>
+                    <th scope="col" th:text="#{user-order-list.days}">Days</th>
+                    <th scope="col" th:text="#{user-order-list.total-price}">Total price</th>
+                    <th scope="col" th:text="#{user-order-list.status}">Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="rentOrder : ${orders}">
+                    <td><span th:text="${rentOrder.id}">Id</span></td>
+                    <td><span th:text="${rentOrder.passport.firstName}">First name</span></td>
+                    <td><span th:text="${rentOrder.passport.lastName}">Last name</span></td>
+                    <td><span th:text="${rentOrder.passport.passportNumber}">Passport number</span></td>
+                    <td><span th:text="${rentOrder.car.id}">Car id</span></td>
+                    <td><img th:src="@{'/images/car-list/'+${rentOrder.car.photoName}}" class="image-holder"></td>
+                    <td><span th:text="${rentOrder.car.carBrand.name}">Car brand</span></td>
+                    <td><span th:text="${rentOrder.car.carModel}">Car model</span></td>
+                    <td><span th:text="${rentOrder.car.rentPrice}">Price per day</span></td>
+                    <td><span th:text="${rentOrder.days}">Days</span></td>
+                    <td><span th:text="${rentOrder.car.rentPrice * rentOrder.days}">Total price</span></td>
+                    <td>
+                        <div class="row">
+                            <span th:text="#{'order-status.'+${rentOrder.orderStatus}}">Status</span>
+                        </div>
+                        <div class="row">
+                            <span th:if="${rentOrder.orderStatus.name() == 'REJECTED'}"
+                                  th:text="${rentOrder.rejectReason}">rejectReason</span>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

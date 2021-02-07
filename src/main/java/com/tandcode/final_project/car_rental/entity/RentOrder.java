@@ -5,6 +5,8 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -22,7 +24,6 @@ public class RentOrder {
     @DecimalMax(value = "90", message = "Maximum rent duration 90 days")
     Integer days;
 
-    //TODO implement driver repo?
     Boolean withDriver;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -33,8 +34,20 @@ public class RentOrder {
     @JoinColumn(name="passport_id")
     Passport passport;
 
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    User user;
+
     @Enumerated(EnumType.STRING)
     OrderStatus orderStatus;
+
+    String rejectReason;
+
+    @DecimalMin(value = "0.0", inclusive = false)
+    @Digits(integer = 8, fraction = 2)
+    BigDecimal repairPrice;
+
+    String repairDescription;
 
     @Override
     public String toString() {

@@ -5,26 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="#{user-list.page-name}"></title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
-          rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
-          crossorigin="anonymous">
-
+    <link th:href="@{/styles/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/styles/all.css}" rel="stylesheet">
     <link th:href="@{/styles/user-edit.css}" rel="stylesheet">
 </head>
 <body>
 <div th:replace="fragments/header :: header"></div>
 <div class="user-form text-center">
-        <form th:action="@{/user}" method="post">
+        <form th:action="@{/user}" th:object="${user}" method="post">
             <h1 class="h3 mb-3 fw-normal" th:text="#{user-edit.editor}"></h1>
-            <input type="hidden" name="userId" th:value="${user.id}">
+            <input type="hidden" name="userId" th:value="*{id}">
             <label for="inputUsername" class="visually-hidden">Username</label>
-            <input type="text" name="username" th:value="${user.username}"
+            <input type="text" name="username" th:value="*{username}"
                    id="inputUsername" class="form-control" th:placeholder="#{login.username}" required>
+            <label for="inputEmail" class="visually-hidden">Username</label>
+            <input type="email" name="email" th:value="*{email}"
+                   id="inputEmail" class="form-control" th:placeholder="#{login.email}" required>
 
-            <input id="manager" class="btn-check" type ="checkbox" name="manager"
-                          th:checked="${#sets.contains(user.roles, T(com.tandcode.final_project.car_rental.entity.Role).MANAGER)}">
-            <label class="w-100 mb-2 btn btn-outline-warning" for="manager" th:text="#{user-edit.manager}">Manager</label>
+            <div th:if="${!#sets.contains(user.roles, T(com.tandcode.final_project.car_rental.entity.Role).ADMIN)}">
+                <input id="manager" class="btn-check" type ="checkbox" name="manager"
+                              th:checked="${#sets.contains(user.roles, T(com.tandcode.final_project.car_rental.entity.Role).MANAGER)}">
+                <label class="w-100 mb-2 btn btn-outline-warning" for="manager" th:text="#{user-edit.manager}">Manager</label>
+
+                <input id="active" class="btn-check" type ="checkbox" name="active"
+                       th:checked="*{active}">
+                <label class="w-100 mb-2 btn btn-outline-success" for="active" th:text="#{user-edit.is-active}">Active</label>
+            </div>
 
             <input class="w-100 btn btn-lg btn-primary" type="submit" th:value="#{user-edit.change}">
         </form>

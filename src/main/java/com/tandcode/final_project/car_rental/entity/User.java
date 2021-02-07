@@ -36,8 +36,11 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-    @OneToMany(mappedBy = "user")
+    @ManyToMany(mappedBy = "users")
     Collection<Passport> passports;
+
+    @OneToMany(mappedBy = "user")
+    Collection<RentOrder> rentOrders;
 
     @Override
     public boolean isAccountNonExpired() {
