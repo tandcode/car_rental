@@ -1,8 +1,10 @@
 package com.tandcode.final_project.car_rental.entity;
 
 import lombok.*;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
@@ -20,8 +22,8 @@ public class RentOrder {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @DecimalMin(value = "1", message = "Minimum rent duration 1 day")
-    @DecimalMax(value = "90", message = "Maximum rent duration 90 days")
+    @DecimalMin(value = "1", message = "min")
+    @DecimalMax(value = "90", message = "max")
     Integer days;
 
     Boolean withDriver;
@@ -32,6 +34,7 @@ public class RentOrder {
 
     @ManyToOne
     @JoinColumn(name="passport_id")
+    @Valid
     Passport passport;
 
     @ManyToOne

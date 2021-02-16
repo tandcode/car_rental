@@ -17,7 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,7 +46,7 @@ public class CarService {
                 .anyMatch(auth -> auth.getAuthority().equals("ADMIN"));
 
         Specification<Car> carBrandSpec = CarSpecs.carCarBrandNameEquals(carBrandFilter);
-        Specification<Car> qualityClassSpec = CarSpecs.carQualityClass_NameEquals(qualityClassFilter);
+        Specification<Car> qualityClassSpec = CarSpecs.carQualityClassNameEquals(qualityClassFilter);
         Specification<Car> notInUsageSpec = CarSpecs.carIsInUsageEquals(false);
 
         Specification<Car> userSpec = Specification.where(carBrandSpec).and(qualityClassSpec).and(notInUsageSpec);
@@ -69,12 +68,12 @@ public class CarService {
 
     public void getCarList(Model model,
                             Authentication authentication,
-                            @RequestParam("page") Optional<Integer> page,
-                            @RequestParam("size") Optional<Integer> size,
-                            @RequestParam("carBrandFilter") Optional<String> filteringCarBrand,
-                            @RequestParam("qualityClassFilter") Optional<String> filteringQualityClass,
-                            @RequestParam("sortField") Optional<String> sortingField,
-                            @RequestParam("sortDir") Optional<String> sortingDir) {
+                            Optional<Integer> page,
+                            Optional<Integer> size,
+                            Optional<String> filteringCarBrand,
+                            Optional<String> filteringQualityClass,
+                            Optional<String> sortingField,
+                            Optional<String> sortingDir) {
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(5);
         String carBrandFilter = filteringCarBrand.orElse("");

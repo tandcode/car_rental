@@ -24,13 +24,13 @@ public class Passport {
     @EqualsAndHashCode.Exclude
     private Long id;
 
-    @NotBlank(message="First name is required")
+    @NotBlank
     String firstName;
 
-    @NotBlank(message="Last name is required")
+    @NotBlank
     String lastName;
 
-    @Pattern(regexp = "^\\w{2}\\d{6}$", message = "Must be formatted XX000000")
+    @Pattern(regexp = "^\\w{2}\\d{6}$")
     @Column(unique = true)
     String passportNumber;
 

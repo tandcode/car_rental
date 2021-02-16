@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -93,14 +94,16 @@ public class RentOrderService {
     }
 
     @Transactional
-    public void processOrder(RentOrder rentOrder, Passport passport, Car car, User user) {
+    public void processOrder(RentOrder rentOrder, User user) {
+        Passport passport = rentOrder.getPassport();
+        Car car = rentOrder.getCar();
         Passport passportFromRepository = passportRepository.findByPassportNumber(passport.getPassportNumber())
                 .orElse(null);
         if(passport.equals(passportFromRepository)){
             passport = passportFromRepository;
         }
 
-        passport.getUsers().add(user);
+        if(!passport.getUsers().contains(user))passport.getUsers().add(user);
         passportRepository.save(passport);
 
         rentOrder.setPassport(passport);
@@ -110,5 +113,6 @@ public class RentOrderService {
 
         log.info("Creating rent order: " + rentOrder);
         rentOrderRepository.save(rentOrder);
+
     }
 }

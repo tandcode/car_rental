@@ -1,9 +1,6 @@
 package com.tandcode.final_project.car_rental.controller;
 
 import com.tandcode.final_project.car_rental.entity.Car;
-import com.tandcode.final_project.car_rental.repository.CarBrandRepository;
-import com.tandcode.final_project.car_rental.repository.CarRepository;
-import com.tandcode.final_project.car_rental.repository.QualityClassRepository;
 import com.tandcode.final_project.car_rental.service.CarService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +31,6 @@ public class CarController {
                            @RequestParam("sortField") Optional<String> sortingField,
                            @RequestParam("sortDir") Optional<String> sortingDir
     ){
-        // TODO Optional: regional standards like money could be convertable based on language
-        // TODO Binding exception handler
         carService.getCarList(model, authentication, page, size,
                 filteringCarBrand, filteringQualityClass, sortingField, sortingDir);
 
@@ -52,13 +47,13 @@ public class CarController {
 
     @PostMapping("/create")
     public String carSave(@Valid @ModelAttribute("car") Car car,
+                          Errors errors,
                           @RequestParam("carBrandName") String carBrandName,
-                          @RequestParam("qualityClassId") String qualityClassId,
-                          Errors errors) {
+                          @RequestParam("qualityClassId") String qualityClassId
+                          ) {
         if (errors.hasErrors()) {
             return "car-create";
         }
-
         carService.saveCar(car, carBrandName, qualityClassId, "Creating car: ");
         return "redirect:/car";
     }

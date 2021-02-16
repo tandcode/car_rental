@@ -5,20 +5,20 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class CarSpecs {
 
-    /** if carBrand_Name == null then specification is ignored */
-    public static Specification<Car> carCarBrandNameEquals(String carBrand_Name) {
+    /** if carBrandName == null then specification is ignored */
+    public static Specification<Car> carCarBrandNameEquals(String carBrandName) {
         return (root, query, builder) ->
-                carBrand_Name.equals("") ?
-//                        carBrand_Name == null ?
+                carBrandName.equals("") ?
+//                        carBrandName == null ?
                         builder.conjunction() :
-                        builder.equal(root.get("carBrand").get("name"), carBrand_Name);
+                        builder.equal(root.get("carBrand").get("name"), carBrandName);
     }
 
-    public static Specification<Car> carQualityClass_NameEquals(String qualityClass_Name) {
+    public static Specification<Car> carQualityClassNameEquals(String qualityClassName) {
         return (root, query, builder) ->
-                qualityClass_Name.equals("") ?
+                qualityClassName.equals("") ?
                         builder.conjunction() :
-                        builder.equal(root.get("qualityClass").get("name"), qualityClass_Name);
+                        builder.equal(root.get("qualityClass").get("name"), qualityClassName);
     }
 
     public static Specification<Car> carIsInUsageEquals(Boolean isInUsage) {

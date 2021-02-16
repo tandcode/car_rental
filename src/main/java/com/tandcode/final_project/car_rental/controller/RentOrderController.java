@@ -1,6 +1,5 @@
 package com.tandcode.final_project.car_rental.controller;
 
-import com.tandcode.final_project.car_rental.entity.Car;
 import com.tandcode.final_project.car_rental.entity.Passport;
 import com.tandcode.final_project.car_rental.entity.RentOrder;
 import com.tandcode.final_project.car_rental.entity.User;
@@ -11,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,7 +30,6 @@ public class RentOrderController {
     @Autowired
     private RentOrderService rentOrderService;
 
-
     @GetMapping("/rent/{carId}")
     private String carRent(Model model){
         return "car-rent";
@@ -39,9 +37,11 @@ public class RentOrderController {
 
     @ModelAttribute
     public void fillModel(@PathVariable Long carId, Model model){
-        model.addAttribute("car", carService.findById(carId));
-        model.addAttribute("rentOrder", new RentOrder());
-        model.addAttribute("passport", new Passport());
+        RentOrder rentOrder = RentOrder.builder()
+                .car(carService.findById(carId))
+                .passport(new Passport())
+                .build();
+        model.addAttribute("rentOrder", rentOrder);
     }
 
     @ModelAttribute(name = "user")
@@ -52,18 +52,14 @@ public class RentOrderController {
     }
 
     @PostMapping("/rent/{carId}")
-    public String processRent(@Valid @ModelAttribute("rentOrder") RentOrder rentOrder,
-                              BindingResult result,
-                              @Valid @ModelAttribute("passport") Passport passport,
-                              @Valid @ModelAttribute("car") Car car,
+    public String processRent(@Valid RentOrder rentOrder,
+                              Errors errors,
                               @ModelAttribute("user") User user,
-//                              RedirectAttributes redirectAttrs,
                               Model model) {
-        if (result.hasErrors()) {
-//            redirectAttrs.addAttribute("id", car.getId());
-            return "/rent/"+car.getId();
+        if (errors.hasErrors()) {
+            return "car-rent";
         }
-        rentOrderService.processOrder(rentOrder, passport, car, user);
+        rentOrderService.processOrder(rentOrder, user);
         return "redirect:/car";
     }
 }
